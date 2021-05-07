@@ -14,14 +14,14 @@ import {
 	GET_CHANGE_PASSWORD_USER_DATA,
 } from "../types";
 import Swal from "sweetalert2";
-import { cartGetAction } from "./cartActions";
-import { getTransaction } from "./transactionActions";
+import { getDashboard } from "./adminActions";
 
 const loginAction = (data) => {
 	return async (dispatch) => {
 		try {
 			dispatch({ type: NULLIFY_ERROR });
 			dispatch({ type: API_LOADING_START });
+			console.log("ea");
 			const response = await axios.post(`${apiUrl_user}/login`, data);
 			if (response.status === 202) {
 				dispatch({ type: API_LOADING_SUCCESS });
@@ -31,6 +31,7 @@ const loginAction = (data) => {
 					text: `because ${response.data.message}`,
 				});
 			}
+			console.log(response.data);
 			const {
 				id,
 				email,
@@ -45,7 +46,7 @@ const loginAction = (data) => {
 				user_address,
 				security_question,
 			} = response.data;
-			localStorage.setItem("token", token);
+			localStorage.setItem("adminToken", token);
 			dispatch({
 				type: AUTH_SIGN,
 				payload: {
@@ -62,9 +63,7 @@ const loginAction = (data) => {
 					securityQuestion: security_question.question,
 				},
 			});
-			console.log("ea");
-			dispatch(cartGetAction(id));
-			dispatch(getTransaction(id));
+			// dispatch(getDashboard());
 			dispatch({ type: API_LOADING_SUCCESS });
 		} catch (err) {
 			console.log(err.response);
@@ -89,17 +88,13 @@ const keepLoginAction = () => {
 		try {
 			dispatch({ type: NULLIFY_ERROR });
 			dispatch({ type: API_LOADING_START });
-			const token = localStorage.getItem("token");
+			const token = localStorage.getItem("adminToken");
 			const headers = {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			};
-			const response = await axios.post(
-				`${apiUrl_user}/keepLogin`,
-				{},
-				headers
-			);
+			const response = await axios.post(`${apiUrl_user}/keepLogin`, {}, headers);
 			const {
 				id,
 				email,
@@ -129,8 +124,7 @@ const keepLoginAction = () => {
 					securityQuestion: security_question.question,
 				},
 			});
-			dispatch(cartGetAction(id));
-			dispatch(getTransaction(id));
+			dispatch(getDashboard());
 			dispatch({ type: API_LOADING_SUCCESS });
 		} catch (err) {
 			if (!err.response) return dispatch({ type: API_LOADING_ERROR });
@@ -142,7 +136,7 @@ const keepLoginAction = () => {
 const logoutAction = () => {
 	return (dispatch) => {
 		dispatch({ type: NULLIFY_ERROR });
-		localStorage.removeItem("token");
+		localStorage.removeItem("adminToken");
 		dispatch({
 			type: AUTH_LOGOUT,
 		});
@@ -196,11 +190,7 @@ const emailVerificationSuccessAction = (payload) => {
 					Authorization: `Bearer ${payload}`,
 				},
 			};
-			const response = await axios.post(
-				`${apiUrl_user}/email-verification`,
-				{},
-				headers
-			);
+			const response = await axios.post(`${apiUrl_user}/email-verification`, {}, headers);
 			const {
 				id,
 				email,
@@ -228,7 +218,7 @@ const emailVerificationSuccessAction = (payload) => {
 			});
 			localStorage.removeItem("username");
 			localStorage.removeItem("email");
-			localStorage.setItem("token", response.data.token);
+			localStorage.setItem("adminToken", response.data.token);
 			Swal.fire({
 				icon: "success",
 				title: "Registered Successfully",
@@ -252,10 +242,7 @@ const authRegisteredCheck = (payload) => {
 				type: API_LOADING_START,
 			});
 
-			const response = await axios.post(
-				`${apiUrl_user}/registered-checker`,
-				payload
-			);
+			const response = await axios.post(`${apiUrl_user}/registered-checker`, payload);
 			const { id, email } = response.data;
 			const security_question = response.data["security_question.question"];
 
@@ -320,9 +307,7 @@ const authChangePasswordEmailRequest = (payload) => {
 
 			await axios.post(`${apiUrl_user}/change-password-email-request`, payload);
 
-			alert(
-				"Link untuk mengubah password sudah dikirim ke email anda. Silahkan cek email anda."
-			);
+			alert("Link untuk mengubah password sudah dikirim ke email anda. Silahkan cek email anda.");
 
 			dispatch({
 				type: API_LOADING_SUCCESS,
@@ -345,10 +330,7 @@ const getChangePasswordUserData = (payload) => {
 				type: API_LOADING_START,
 			});
 
-			const response = await axios.post(
-				`${apiUrl_user}/registered-checker`,
-				payload
-			);
+			const response = await axios.post(`${apiUrl_user}/registered-checker`, payload);
 			const { id, email } = response.data;
 
 			dispatch({
@@ -382,11 +364,7 @@ const authChangePassword = (payload) => {
 			};
 
 			if (token) {
-				await axios.patch(
-					`${apiUrl_user}/change-password-with-email`,
-					{ newPassword },
-					headers
-				);
+				await axios.patch(`${apiUrl_user}/change-password-with-email`, { newPassword }, headers);
 			} else {
 				await axios.patch(`${apiUrl_user}/change-password-without-email`, {
 					newPassword,
@@ -411,18 +389,14 @@ const changeMainAddressAction = (payload) => {
 		try {
 			dispatch({ type: NULLIFY_ERROR });
 			dispatch({ type: API_LOADING_START });
-			const oldToken = localStorage.getItem("token");
+			const oldToken = localStorage.getItem("adminToken");
 			const headers = {
 				headers: {
 					Authorization: `Bearer ${oldToken}`,
 				},
 			};
-			const response = await axios.patch(
-				`${apiUrl_user}/change-main-address/`,
-				payload,
-				headers
-			);
-			localStorage.removeItem("token");
+			const response = await axios.patch(`${apiUrl_user}/change-main-address/`, payload, headers);
+			localStorage.removeItem("adminToken");
 			const {
 				id,
 				email,
@@ -436,7 +410,7 @@ const changeMainAddressAction = (payload) => {
 				token,
 				user_address,
 			} = response.data;
-			localStorage.setItem("token", token);
+			localStorage.setItem("adminToken", token);
 			dispatch({
 				type: AUTH_SIGN,
 				payload: {
@@ -625,11 +599,7 @@ const uploadProfilePic = (payload) => {
 				},
 			};
 
-			await axios.patch(
-				`${apiUrl_user}/edit-profile-pic/${userId}`,
-				formData,
-				headers
-			);
+			await axios.patch(`${apiUrl_user}/edit-profile-pic/${userId}`, formData, headers);
 
 			dispatch(keepLoginAction());
 		} catch (err) {

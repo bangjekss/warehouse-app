@@ -7,8 +7,18 @@ import InputGroupIcon from "./InputGroupIcon";
 import ButtonSurface from "./ButtonSurface";
 import ButtonPrimary from "./ButtonPrimary";
 import ButtonAccent from "./ButtonAccent";
-import AdminSidebar from "./AdminSidebar";
 import TableCustom from "./TableCustom";
+import CardProduct from "./CardProduct";
+import UserFooter from "./UserFooter";
+import ProcessCartCard from "./ProcessCartCard";
+import CartCard from "./CartCard";
+import AddressCard from "./AddressCard";
+import GeneralProfile from "./GeneralProfile";
+import NewAddress from "./NewAddress";
+import ProfilePic from "./ProfilePic";
+import UserDetailTransactionModal from "./UserDetailTransactionModal";
+import UserTransactionCard from "./UserTransactionCard";
+import ReviewModal from "./ReviewModal";
 
 export {
 	Header,
@@ -20,6 +30,16 @@ export {
 	ButtonSurface,
 	ButtonPrimary,
 	ButtonAccent,
-	AdminSidebar,
 	TableCustom,
+	CardProduct,
+	UserFooter,
+	ProcessCartCard,
+	CartCard,
+	AddressCard,
+	GeneralProfile,
+	NewAddress,
+	ProfilePic,
+	UserTransactionCard,
+	ReviewModal,
+	UserDetailTransactionModal,
 };
