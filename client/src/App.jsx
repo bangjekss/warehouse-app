@@ -14,6 +14,7 @@ import {
 	LoginPage,
 	NotFoundPage,
 	RegisterPage,
+	HomePage,
 } from "./pages";
 import { useDispatch, useSelector } from "react-redux";
 import { keepLoginAction } from "./redux/actions";
@@ -27,7 +28,7 @@ const App = () => {
 
 	return (
 		<div>
-			<Route path="/" exact component={ProductPage} />
+			<Route path="/" exact component={HomePage} />
 			<Route path="/register" component={RegisterPage} />
 			<Route path="/login" component={LoginPage} />
 			<Route path="/forget-password" component={ForgetPasswordPage} />

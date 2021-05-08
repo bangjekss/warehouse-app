@@ -145,6 +145,7 @@ function AdminTable({
 					</TableHead>
 					<TableBody>
 						{rowData.map((row) => {
+							console.log(row);
 							const nullStock = [];
 							row.inventory.forEach((value) => {
 								if (value.stock === 0) nullStock.push(value);

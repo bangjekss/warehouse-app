@@ -10,6 +10,7 @@ import EmailRedirectPage from "./EmailRedirectPage";
 import DetailProductPage from "./DetailProductPage";
 import ProfilePage from "./ProfilePage";
 import CheckoutPage from "./CheckoutPage";
+import HomePage from "./HomePage";
 
 export {
 	LoginPage,
@@ -24,4 +25,5 @@ export {
 	DetailProductPage,
 	ProfilePage,
 	CheckoutPage,
+	HomePage,
 };

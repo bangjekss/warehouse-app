@@ -22,9 +22,7 @@ import Swal from "sweetalert2";
 const Header = () => {
 	const dispatch = useDispatch();
 	const styles = useStyles();
-	const { isLogin, username, roleId } = useSelector(
-		(state) => state.authReducer
-	);
+	const { isLogin, username, roleId } = useSelector((state) => state.authReducer);
 	const { cart } = useSelector((state) => state.cartReducer);
 
 	const [showSearchInput, setShowSearchInput] = useState(false);
@@ -46,93 +44,6 @@ const Header = () => {
 		});
 	};
 
-	if (isLogin && roleId === 1) {
-		return (
-			<div className={styles.containerAdmin}>
-				<div className={styles.leftContainerAdmin}>
-					<div>
-						<Link to="/admin" className={styles.brandLink}>
-							<span style={{ color: surfaceColor }}>nature</span>
-							<span style={{ color: accentColor }}>goods</span>
-						</Link>
-					</div>
-					<div className={styles.leftContainerContent2}>
-						<i
-							className="bi bi-intersect"
-							style={{ color: surfaceColor, fontSize: 20 }}
-						></i>
-					</div>
-				</div>
-				<div className={styles.rightContainerAdmin}>
-					<div className={styles.rightContainerContent1}>
-						<InputGroup
-							style={{
-								backgroundColor: primaryColor,
-								boxShadow: "1px 0 12px 1px rgba(0,0,0,0.1)",
-								borderRadius: 50,
-							}}
-						>
-							<Input
-								placeholder="search"
-								style={{
-									borderRadius: 50,
-									paddingInline: 20,
-									borderWidth: 0,
-									backgroundColor: primaryColor,
-								}}
-							/>
-							<InputGroupAddon addonType="prepend">
-								<InputGroupText
-									onClick={() => setShowSearchInput(!showSearchInput)}
-									style={{ borderRadius: 50 }}
-									className={styles.searchInputBtn}
-								>
-									<i className="bi bi-search"></i>
-								</InputGroupText>
-							</InputGroupAddon>
-						</InputGroup>
-					</div>
-					<div className="d-flex align-items-center">
-						<div
-							className="d-flex align-items-center"
-							style={{
-								borderRight: "1px solid rgba(0,0,0,0.1)",
-								paddingInline: 20,
-							}}
-						>
-							<div>
-								<Badge badgeContent={10} color="error" max={9} overlap="circle">
-									<i className="bi bi-bell" style={{ fontSize: 22 }}></i>
-								</Badge>
-							</div>
-						</div>
-						<div
-							className="d-flex align-items-center"
-							style={{
-								paddingLeft: 20,
-							}}
-						>
-							<div>{username}</div>
-							<UncontrolledDropdown inNavbar>
-								<DropdownToggle nav>
-									<img
-										src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg"
-										height="45"
-									/>
-								</DropdownToggle>
-								<DropdownMenu right>
-									<DropdownItem>Profile</DropdownItem>
-									<DropdownItem divider />
-									<DropdownItem onClick={handleLogoutBtn}>Logout</DropdownItem>
-								</DropdownMenu>
-							</UncontrolledDropdown>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
-
 	if (isLogin) {
 		return (
 			<div className={styles.container}>
@@ -143,7 +54,7 @@ const Header = () => {
 				</div>
 				<div className={styles.navContainer}>
 					<div className={styles.navLeftContainer}>
-						<Link to="/products" className={styles.navItemContainer}>
+						<Link to="/" className={styles.navItemContainer}>
 							<div className={styles.textLink}>home</div>
 						</Link>
 						<Link to="/products" className={styles.navItemContainer}>
@@ -159,10 +70,7 @@ const Header = () => {
 						>
 							<InputGroup>
 								<Fade left when={showSearchInput}>
-									<Input
-										placeholder="search"
-										style={{ borderRadius: 50, paddingInline: 20 }}
-									/>
+									<Input placeholder="search" style={{ borderRadius: 50, paddingInline: 20 }} />
 								</Fade>
 								<InputGroupAddon addonType="prepend">
 									<InputGroupText
@@ -187,16 +95,8 @@ const Header = () => {
 						>
 							<Link to="/cart">
 								<div className={styles.cartBtn}>
-									<Badge
-										badgeContent={cart.length === 0 ? null : cart.length}
-										color="error"
-										max={9}
-										overlap="circle"
-									>
-										<i
-											className="bi bi-cart3"
-											style={{ fontSize: 22, color: "black" }}
-										></i>
+									<Badge badgeContent={cart.length === 0 ? null : cart.length} color="error" max={9} overlap="circle">
+										<i className="bi bi-cart3" style={{ fontSize: 22, color: "black" }}></i>
 									</Badge>
 								</div>
 							</Link>
@@ -212,10 +112,7 @@ const Header = () => {
 							<div>{username}</div>
 							<UncontrolledDropdown inNavbar>
 								<DropdownToggle nav>
-									<img
-										src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg"
-										height="45"
-									/>
+									<img src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg" height="45" />
 								</DropdownToggle>
 								<DropdownMenu right>
 									<Link to="/profile" className={styles.link}>
@@ -258,10 +155,7 @@ const Header = () => {
 					>
 						<InputGroup>
 							<Fade left when={showSearchInput}>
-								<Input
-									placeholder="search"
-									style={{ borderRadius: 50, paddingInline: 20 }}
-								/>
+								<Input placeholder="search" style={{ borderRadius: 50, paddingInline: 20 }} />
 							</Fade>
 							<InputGroupAddon addonType="prepend">
 								<InputGroupText
@@ -279,9 +173,7 @@ const Header = () => {
 					</div>
 					<div>
 						<Link to="/login">
-							<Button style={{ backgroundColor: surfaceColor, borderWidth: 0 }}>
-								sign in
-							</Button>
+							<Button style={{ backgroundColor: surfaceColor, borderWidth: 0 }}>sign in</Button>
 						</Link>
 					</div>
 				</div>
