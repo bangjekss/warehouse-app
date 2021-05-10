@@ -2,16 +2,9 @@ import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import Loader from "react-loader-spinner";
 import { Button } from "reactstrap";
-import {
-	surfaceColor,
-	secondSurfaceColor,
-	accentColor,
-	secondAccentColor,
-	secondPrimaryColor,
-	primaryColor,
-} from "../helpers";
+import { surfaceColor, secondSurfaceColor, accentColor, secondAccentColor, focusColor } from "../helpers";
 
-function ButtonPrimary({
+function ButtonAccent({
 	px,
 	py,
 	pl,
@@ -26,14 +19,13 @@ function ButtonPrimary({
 	mb,
 	id,
 	width,
-	height,
 	disabled,
 	onClick,
 	text,
 	fontSize,
 	isLoading,
 	color,
-	fontColor,
+	icon,
 }) {
 	const styles = useStyles();
 	return (
@@ -48,12 +40,11 @@ function ButtonPrimary({
 			}}
 		>
 			<Button
-				color={"warning"}
+				color={color || "warning"}
 				className={styles.button}
 				disabled={disabled ? disabled : null}
 				onClick={onClick ? onClick : null}
 				style={{
-					height: height || "100%",
 					width: width || "100%",
 					paddingInline: px || 0,
 					paddingBlock: py || 0,
@@ -61,15 +52,15 @@ function ButtonPrimary({
 					paddingRight: pr || 20,
 					paddingTop: pt || 10,
 					paddingBottom: pb || 10,
+					// backgroundColor:
 				}}
 			>
 				{disabled && isLoading ? (
 					<Loader type="ThreeDots" color="white" height="auto" width={50} />
+				) : icon ? (
+					<i className={icon}></i>
 				) : (
-					<div
-						className={styles.childButton}
-						style={{ fontSize: fontSize ? fontSize : null, color: fontColor ? fontColor : null }}
-					>
+					<div className={styles.childButton} style={{ fontSize: fontSize ? fontSize : null }}>
 						{text}
 					</div>
 				)}
@@ -80,20 +71,13 @@ function ButtonPrimary({
 
 const useStyles = makeStyles({
 	button: {
-		backgroundColor: primaryColor,
 		borderWidth: 0,
 		paddingBlock: 10,
 		borderRadius: 5,
-		"&:hover": {
-			backgroundColor: secondPrimaryColor,
-		},
-		"&:focus": {
-			backgroundColor: secondPrimaryColor,
-		},
 	},
 	childButton: {
-		color: "black",
+		color: "white",
 	},
 });
 
-export default ButtonPrimary;
+export default ButtonAccent;

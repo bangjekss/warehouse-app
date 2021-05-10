@@ -1,6 +1,7 @@
 const { user, securityQuestion, userAddress } = require("../models");
 const { encryptToken } = require("../middlewares");
 const { encryptHandler, emailHandler } = require("../handlers");
+const { regexEmail } = require("../helpers");
 
 const { uploader } = require("../handlers");
 const pify = require("pify");
@@ -68,35 +69,34 @@ const getSecurityQuestion = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-	console.log(req.body);
-	if (req.body.user === "admin" && req.body.password === "admin") {
-		const admin = await user.findOne({
-			attributes: {
-				exclude: ["password", "security_answer"],
-			},
-			where: {
-				username: req.body.user,
-				password: req.body.password,
-			},
-			include: [
-				{
-					model: userAddress,
-					as: "user_address",
-				},
-				{
-					model: securityQuestion,
-				},
-			],
-		});
-		const response = {
-			...admin.dataValues,
-			token: encryptToken(admin.dataValues),
-		};
-		console.log(response);
-		return res.status(200).send(response);
-	}
 	try {
-		const regexEmail = /^[\w\-\.]+(@[\w\-\.]+\.)+[\w\.\-]{2,4}$/;
+		if (req.body.user === "admin" && req.body.password === "admin") {
+			console.log("eaea");
+			const admin = await user.findOne({
+				attributes: {
+					exclude: ["password", "security_answer"],
+				},
+				where: {
+					username: req.body.user,
+					password: req.body.password,
+				},
+				include: [
+					{
+						model: userAddress,
+						as: "user_address",
+					},
+					{
+						model: securityQuestion,
+					},
+				],
+			});
+			const response = {
+				...admin.dataValues,
+				token: encryptToken(admin.dataValues),
+			};
+			// console.log(response);
+			return res.status(200).send(response);
+		}
 		let userQuery;
 		if (req.body.user.match(regexEmail)) {
 			userQuery = {
@@ -105,12 +105,12 @@ const login = async (req, res, next) => {
 			};
 		} else {
 			userQuery = {
-				email: req.body.user,
+				username: req.body.user,
 				password: encryptHandler(req.body.password),
 			};
 		}
 		const getUser = await user.findAll({
-			where: user,
+			where: userQuery,
 			attributes: { exclude: ["password", "security_answer"] },
 			include: [
 				{
@@ -133,7 +133,6 @@ const login = async (req, res, next) => {
 			...getUser[0].dataValues,
 			token: encryptToken(getUser[0].dataValues),
 		};
-		console.log(response);
 		return res.status(200).send(response);
 	} catch (err) {
 		next(err);

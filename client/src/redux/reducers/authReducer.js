@@ -18,7 +18,7 @@ const INITIAL_STATE = {
 	isLogin: false,
 	isError: false,
 	errorMessage: "",
-	securityQuestion: "",
+	securityQuestion: [],
 	changePermitted: false,
 	id: null,
 	errorMessage: "",
@@ -61,7 +61,17 @@ const authReducer = (state = INITIAL_STATE, action) => {
 		case AUTH_SIGN:
 			return {
 				...state,
-				...action.payload,
+				id: action.payload.id,
+				username: action.payload.username,
+				email: action.payload.email,
+				emailVerificationId: action.payload.email_verification_id,
+				name: action.payload.full_name,
+				imagepath: action.payload.imagepath,
+				phone: action.payload.phone,
+				roleId: action.payload.role_id,
+				securityQuestion: action.payload.security_question,
+				address: action.payload.user_address,
+				userStatusId: action.payload.user_status_id,
 				isLogin: true,
 			};
 		case AUTH_LOGOUT:

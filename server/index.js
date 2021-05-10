@@ -13,13 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-	console.log(req.body);
-	console.log(req.fields);
-	console.log(req.files);
+	// console.log(req.body);
+	// console.log(req.fields);
+	// console.log(req.files);
 	res.status(200).send(req.body);
 });
 app.use("/user", userRouters);
-// app.use("/product", productRouters);
+app.use("/product", productRouters);
 // app.use("/cart", cartRouters);
 // app.use("/transaction", transactionRouters);
 app.use("/admin", adminRouters);

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import Loader from "react-loader-spinner";
 import { Button } from "reactstrap";
-import { surfaceColor, secondSurfaceColor } from "../helpers";
+import { surfaceColor, secondSurfaceColor, accentColor, secondAccentColor } from "../helpers";
 
 function ButtonSurface({
 	px,
@@ -19,9 +19,14 @@ function ButtonSurface({
 	mb,
 	id,
 	width,
+	height,
 	disabled,
 	onClick,
 	text,
+	fontSize,
+	isLoading,
+	loader,
+	color,
 }) {
 	const styles = useStyles();
 	return (
@@ -36,11 +41,12 @@ function ButtonSurface({
 			}}
 		>
 			<Button
-				color="info"
+				color={"warning"}
 				className={styles.button}
 				disabled={disabled ? disabled : null}
 				onClick={onClick ? onClick : null}
 				style={{
+					height: height || "100%",
 					width: width || "100%",
 					paddingInline: px || 0,
 					paddingBlock: py || 0,
@@ -50,10 +56,12 @@ function ButtonSurface({
 					paddingBottom: pb || 10,
 				}}
 			>
-				{disabled ? (
-					<Loader type="ThreeDots" color="white" height="auto" width={50} />
+				{disabled && isLoading ? (
+					<Loader type={loader || "ThreeDots"} color="white" height="auto" width={50} />
 				) : (
-					<div className={styles.childButton}>{text}</div>
+					<div className={styles.childButton} style={{ fontSize: fontSize ? fontSize : null }}>
+						{text}
+					</div>
 				)}
 			</Button>
 		</div>

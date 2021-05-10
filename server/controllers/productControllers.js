@@ -1,16 +1,10 @@
 const { Op } = require("sequelize");
+const { apiURL } = require("../helpers");
 const { product, inventory, category, productImage } = require("../models");
 
 const addProduct = async (req, res, next) => {
 	try {
-		const {
-			name,
-			price,
-			category_id,
-			stock,
-			warehouse_id,
-			description,
-		} = req.body;
+		const { name, price, category_id, stock, warehouse_id, description } = req.body;
 		const newProduct = await product.create({
 			name,
 			price,
@@ -30,8 +24,10 @@ const addProduct = async (req, res, next) => {
 
 const getProducts = async (req, res, next) => {
 	try {
+		const limit = parseInt(req.query.limit);
 		let query = {
-			raw: true,
+			limit,
+			offset: parseInt(req.query.page) * limit - limit,
 			where: {
 				is_available: 1,
 			},
@@ -44,7 +40,7 @@ const getProducts = async (req, res, next) => {
 				},
 			};
 		}
-		if (req.query.category)
+		if (req.query.category && req.query.category != 0)
 			query.where = {
 				...query.where,
 				category_id: parseInt(req.query.category),
@@ -66,41 +62,21 @@ const getProducts = async (req, res, next) => {
 					[Op.between]: [parseInt(req.query.min), parseInt(req.query.max)],
 				},
 			};
-		if (req.query.sort == 1)
-			query = { ...query, order: [["created_at", "DESC"]] };
-		if (req.query.sort == 2)
-			query = { ...query, order: [["created_at", "ASC"]] };
+		if (req.query.sort == 1) query = { ...query, order: [["created_at", "DESC"]] };
+		if (req.query.sort == 2) query = { ...query, order: [["created_at", "ASC"]] };
 		if (req.query.sort == 3) query = { ...query, order: [["price", "ASC"]] };
 		if (req.query.sort == 4) query = { ...query, order: [["price", "DESC"]] };
 		query = {
 			...query,
-			attributes: [
-				"id",
-				"name",
-				"price",
-				"weight",
-				"is_available",
-				"is_available_all",
-				"description",
-				"category.category",
-			],
-			include: [
-				{
-					model: category,
-					attributes: [],
-				},
-			],
+			include: [{ model: category }],
 		};
 		const checkProductsStock = await product.findAll({
 			include: [{ model: inventory, as: "inventory" }, { model: category }],
 		});
+		// console.log();
 		let getIndex = [];
 		checkProductsStock.forEach((value) => {
-			if (
-				value.inventory[0].stock === 0 &&
-				value.inventory[1].stock === 0 &&
-				value.inventory[2].stock === 0
-			) {
+			if (value.inventory[0].stock === 0 && value.inventory[1].stock === 0 && value.inventory[2].stock === 0) {
 				getIndex.push(value.id);
 			}
 		});
@@ -114,6 +90,12 @@ const getProducts = async (req, res, next) => {
 				},
 			}
 		);
+		console.log(query);
+		const getProducts_ = await product.findAll({
+			where: {
+				is_available: 1,
+			},
+		});
 		const getProducts = await product.findAll(query);
 		const productImg = await productImage.findAll();
 		const getInventory = await inventory.findAll();
@@ -131,14 +113,19 @@ const getProducts = async (req, res, next) => {
 				}
 			});
 			return {
-				...value,
+				...value.dataValues,
 				stock: num,
-				image: productImg.filter((item) => {
-					return item.product_id === value.id;
-				}),
+				image: productImg
+					.filter((item) => {
+						return item.product_id === value.id;
+					})
+					.map((item) => {
+						return { ...item.dataValues, imagepath: `${apiURL}${item.dataValues.imagepath}` };
+					}),
 			};
 		});
 		const response = {
+			totalProducts: getProducts_.length,
 			maxPrice: getMaxPrice.price,
 			minPrice: getMinPrice.price,
 			products: productsGetImageAndStock,
@@ -151,11 +138,10 @@ const getProducts = async (req, res, next) => {
 
 const getCategories = async (req, res, next) => {
 	try {
+		console.log("ea");
 		const categories = await category.findAll();
 		const response = [];
-		categories.forEach((value) =>
-			response.push({ value: value.id, label: value.category })
-		);
+		categories.forEach((value) => response.push({ value: value.id, label: value.category }));
 		return res.status(200).send(response);
 	} catch (err) {
 		next(err);

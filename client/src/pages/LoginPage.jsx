@@ -5,19 +5,11 @@ import { accentColor, primaryColor, surfaceColor } from "../helpers";
 import { loginAction } from "../redux/actions";
 import { Link, Redirect } from "react-router-dom";
 import Swal from "sweetalert2";
-import {
-	ButtonAccent,
-	ButtonSurface,
-	InputForm,
-	InputGroupIcon,
-	InputToolTip,
-} from "../components";
+import { ButtonAccent, ButtonSurface, InputForm, InputGroupIcon, InputToolTip } from "../components";
 
 const LoginPage = () => {
 	const dispatch = useDispatch();
-	const { isLoading, isLogin, roleId } = useSelector(
-		(state) => state.authReducer
-	);
+	const { isLoading, isLogin } = useSelector((state) => state.authReducer);
 	const [user, setUser] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +29,7 @@ const LoginPage = () => {
 		dispatch(loginAction(payload));
 	};
 
-	if (isLogin && roleId === 1) return <Redirect to="/admin/dashboard" />;
-	if (isLogin && roleId === 2) return <Redirect to="/" />;
+	if (isLogin) return <Redirect to="/products" />;
 
 	return (
 		<div
@@ -74,11 +65,7 @@ const LoginPage = () => {
 				>
 					<div>
 						<Link to="/">
-							<img
-								src="https://i.imgur.com/dbtNOT2.png"
-								alt="file_err"
-								width="450"
-							/>
+							<img src="https://i.imgur.com/dbtNOT2.png" alt="file_err" width="450" />
 						</Link>
 					</div>
 				</div>
@@ -119,11 +106,7 @@ const LoginPage = () => {
 							</div>
 							<div className="d-flex justify-content-center mt-5">
 								<div className="px-2" style={{ width: "40%" }}>
-									<ButtonSurface
-										disabled={isLoading}
-										text="Login"
-										onClick={handleLoginBtn}
-									/>
+									<ButtonSurface disabled={isLoading} text="Login" onClick={handleLoginBtn} />
 								</div>
 								<div className="px-2" style={{ width: "40%" }}>
 									<Link to="/register">

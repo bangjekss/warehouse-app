@@ -3,20 +3,7 @@ import Select from "react-select";
 import { Label } from "reactstrap";
 import { primaryColor } from "../helpers";
 
-function InputSelect({
-	onChange,
-	defaultValue,
-	options,
-	label,
-	mx,
-	my,
-	ml,
-	mr,
-	mt,
-	mb,
-	isSearchable,
-}) {
-	console.log(options);
+function InputSelect({ onChange, value, options, label, mx, my, ml, mr, mt, mb, isSearchable, placeholder }) {
 	return (
 		<div
 			style={{
@@ -34,8 +21,9 @@ function InputSelect({
 				isSearchable={isSearchable ? isSearchable : false}
 				styles={selectStyles}
 				options={options}
-				defaultValue={defaultValue}
+				value={value}
 				onChange={onChange}
+				placeholder={placeholder}
 			/>
 		</div>
 	);
@@ -44,7 +32,7 @@ function InputSelect({
 const selectStyles = {
 	option: (provided, state) => ({
 		...provided,
-		borderBottom: "1px dotted pink",
+		borderBottom: "1px solid rgba(0,0,0,0.1)",
 		color: state.isSelected ? "white" : "black",
 		padding: 10,
 	}),
@@ -52,7 +40,7 @@ const selectStyles = {
 		borderRadius: 10,
 		paddingInline: 10,
 		paddingBlock: 7,
-		borderWidth: 0,
+		border: "1px solid rgba(0,0,0,0.1)",
 		backgroundColor: primaryColor,
 		boxShadow: "0 0 5px 1px rgba(0, 0, 0, 0.1)",
 		display: "flex",

@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 const Header = () => {
 	const dispatch = useDispatch();
 	const styles = useStyles();
-	const { isLogin, username, roleId } = useSelector((state) => state.authReducer);
+	const { isLogin, username } = useSelector((state) => state.authReducer);
 	const { cart } = useSelector((state) => state.cartReducer);
 
 	const [showSearchInput, setShowSearchInput] = useState(false);
@@ -54,11 +54,8 @@ const Header = () => {
 				</div>
 				<div className={styles.navContainer}>
 					<div className={styles.navLeftContainer}>
-						<Link to="/" className={styles.navItemContainer}>
-							<div className={styles.textLink}>home</div>
-						</Link>
 						<Link to="/products" className={styles.navItemContainer}>
-							<div className={styles.textLink}>products</div>
+							<div className={styles.textLink}>shop</div>
 						</Link>
 					</div>
 					<div className="d-flex align-items-center">
